@@ -59,11 +59,17 @@ end
 table.insert(targets, fileLen)
 
 local outputFullName = string.format("%s/%s", outputpath, filename)
-local outputFullPath = outputFullName:sub(1, -filename:len()-1)
+local index = outputFullName:reverse():find("/")
+local outputFullPath = outputFullName:sub(1, -index)
 print(outputFullName, outputFullPath)
 os.execute("mkdir -p " .. outputFullPath)
 
 local output = io.open(outputFullName, "w")
+if not output then
+    print("Open output file failed!", outputFullName)
+    return
+end
+
 for i=1,#targets,2 do
     local first = targets[i]
     local last = targets[i+1]
